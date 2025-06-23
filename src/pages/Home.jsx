@@ -8,13 +8,13 @@ import { signOut } from 'firebase/auth';   // <-- 2. Importamos la función `sig
 import useAdminStatus from '../hooks/useAdminStatus'; // <-- 1. Importamos el hook
 
 // 1. Importamos TODAS las imágenes que usaremos
-import heroBackground from '../assets/Bann-Historia.jpg';
-import educativosImage from '../assets/INAUGURACION-DE-LABORATORIO.jpg';
+import heroBackground from '../assets/UNIMET.jpg';
+import educativosImage from '../assets/lab.jpg';
 import deportivosImage from '../assets/Selecciones-deportivas.jpg';
 import logoUnimet from '../assets/Logo-UNIMET-color-300-dpi.jpg';
 import centroMundoXImage from '../assets/Centro-Mundo-X.jpg';
 // Asumimos que tienes una imagen para Auditorios y Oficinas, si no, puedes repetir una.
-import auditoriosImage from '../assets/auditorios-placeholder.jpg'; // Reemplaza con una imagen real
+import auditoriosImage from '../assets/auditorio.jpg'; // Reemplaza con una imagen real
 import oficinasImage from '../assets/oficinas-placeholder.jpg';   // Reemplaza con una imagen real
 
 

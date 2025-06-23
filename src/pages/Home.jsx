@@ -66,26 +66,47 @@ const Home = () => {
           <Link to="/categories">Categorías</Link>
           {currentUser && <Link to="/my-reservations">Mis Reservas</Link>}
         </nav>
-        {currentUser ? (
-          <div className="user-actions">
-           {isAdmin && <button onClick={() => {console.log('¡Botón de Administrador Clickeado!'); 
-           navigate('/admin');}} className="btn-admin">Administrador
-           
-          </button>}
-            
-            <button onClick={() => navigate('/profile')} className="btn-profile">Perfil</button>
-            <button onClick={handleLogout} className="btn-logout">Cerrar Sesión</button>
-          </div>
-          
-        ) : (
-           <div>
-            <button onClick={() => navigate('/register')} className="btn-primary" style={{width: 'auto', padding: '8px 15px'}}>Crear Cuenta</button>
-            <button onClick={() => navigate('/login')} style={{marginLeft: '10px'}}>Iniciar Sesión</button>
-          </div>
-        )}
+          {currentUser ? (
+              <div className="user-actions">
+                  {isAdmin && (
+                      <button
+                          onClick={() => {
+                              console.log('¡Botón de Administrador Clickeado!');
+                              navigate('/admin');
+                          }}
+                          className="btn-admin"
+                      >
+                          Administrador
+                      </button>
+                  )}
+                  <button onClick={() => navigate('/profile')} className="btn-profile">
+                      Perfil
+                  </button>
+                  <button
+                      onClick={handleLogout}
+                      className="btn-logout"
+                      style={{backgroundColor: 'red', color: 'white'}}
+                  >
+                      Cerrar Sesión
+                  </button>
+              </div>
+          ) : (
+              <div>
+                  <button
+                      onClick={() => navigate('/register')}
+                      className="btn-primary"
+                      style={{ width: 'auto', padding: '8px 15px' }}
+                  >
+                      Crear Cuenta
+                  </button>
+                  <button onClick={() => navigate('/login')} style={{ marginLeft: '10px' }}>
+                      Iniciar Sesión
+                  </button>
+              </div>
+          )}
       </header>
 
-      
+
       <main>
         {/* --- Sección Hero con la imagen de fondo correcta y el logo correcto --- */}
         <section className="hero-section" style={{ backgroundImage: `url(${heroBackground})` }}>

@@ -1,11 +1,11 @@
 // src/components/ChatbotWidget.jsx
 
-import React from 'react';
+import React, { useState } from 'react';
 import Chatbot from 'react-chatbot-kit';
 import 'react-chatbot-kit/build/main.css';
 import { useNavigate } from 'react-router-dom';
-import { db, auth } from '../firebase/config'; // Importamos la DB y Auth
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'; // Funciones para escribir en Firestore
+import { db, auth } from '../firebase/config';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 // Configuración visual y mensajes iniciales del bot
 const config = {
@@ -28,10 +28,10 @@ const MessageParser = ({ children, actions }) => {
 
     if (lowerCaseMessage.includes("hola") || lowerCaseMessage.includes("buenas")) {
       actions.handleGreeting();
-    } 
+    }
     else if (lowerCaseMessage.includes("reserva") || lowerCaseMessage.includes("modificar")) {
       actions.handleModifyReservation();
-    } 
+    }
     else if (lowerCaseMessage.includes("supervisor") || lowerCaseMessage.includes("contacto")) {
       actions.handleContactSupervisor();
     }
@@ -50,11 +50,11 @@ const MessageParser = ({ children, actions }) => {
   };
 
   return (
-    <div>
-      {React.Children.map(children, (child) => {
-        return React.cloneElement(child, { parse: parse, actions });
-      })}
-    </div>
+      <div>
+        {React.Children.map(children, (child) => {
+          return React.cloneElement(child, { parse: parse, actions });
+        })}
+      </div>
   );
 };
 
@@ -105,34 +105,53 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   };
 
   return (
-    <div>
-      {React.Children.map(children, (child) => {
-        return React.cloneElement(child, {
-          actions: {
-            handleGreeting,
-            handleModifyReservation,
-            handleContactSupervisor,
-            handleModifyProfile,
-            handleCreateTicket, // <-- Nueva acción añadida
-            handleHelp,
-            handleUnknown,
-          },
-        });
-      })}
-    </div>
+      <div>
+        {React.Children.map(children, (child) => {
+          return React.cloneElement(child, {
+            actions: {
+              handleGreeting,
+              handleModifyReservation,
+              handleContactSupervisor,
+              handleModifyProfile,
+              handleCreateTicket,
+              handleHelp,
+              handleUnknown,
+            },
+          });
+        })}
+      </div>
   );
 };
 
 // El componente principal del Widget que se exporta
-const ChatbotWidget = () => (
-  <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
-    <Chatbot config={config} messageParser={MessageParser} actionProvider={ActionProvider} />
-  </div>
-);
+const ChatbotWidget = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  const toggleChatbot = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+      <div className="chatbot-wrapper">
+        {isOpen ? (
+            <div className="chatbot-container">
+              <button className="close-button" onClick={toggleChatbot}>
+                ✖
+              </button>
+              <Chatbot config={config} messageParser={MessageParser} actionProvider={ActionProvider} />
+            </div>
+        ) : (
+            <button className="open-button" onClick={toggleChatbot}>
+              💬
+            </button>
+        )}
+      </div>
+  );
+};
 
 // Función helper para crear los objetos de mensaje del bot
 function createChatBotMessage(message, options) {
-    return { message, type: 'bot', ...options };
+  return { message, type: 'bot', ...options };
 }
 
 export default ChatbotWidget;

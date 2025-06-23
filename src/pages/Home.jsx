@@ -1,8 +1,10 @@
 // src/pages/Home.jsx
 
 import React from 'react';
+import React, { useState } from 'react'; 
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth'; // Importamos el hook para saber si el usuario es invitado
+import Modal from '../components/Modal'
 
 // Componente reutilizable para las tarjetas
 const SpaceTypeCard = ({ title, description, imageUrl, onClick }) => (
@@ -20,18 +22,31 @@ const Home = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth(); // Obtenemos el usuario para mostrar botones diferentes
 
-  // Función que se ejecuta al hacer clic en las tarjetas de categoría
+  const [showGuestModal, setShowGuestModal] = useState(false); // Para el invitado
+  const [showFutureFeatureModal, setShowFutureFeatureModal] = useState(false); // Para funcionalidad futura
+
   const handleViewSpacesClick = () => {
     if (currentUser) {
-      // Si el usuario está registrado, podría navegar a la lista de espacios
-      alert("Navegando a la categoría (funcionalidad futura).");
-      // navigate('/espacios/educativos'); // Ejemplo
+      // Si el usuario está registrado, mostramos el modal de "funcionalidad futura"
+      setShowFutureFeatureModal(true);
     } else {
-      // Si es un invitado, le avisamos y lo enviamos al login
-      alert("Para ver los espacios y reservar, primero necesitas iniciar sesión.");
-      navigate('/login');
+      // Si es un invitado, mostramos el modal de "iniciar sesión"
+      setShowGuestModal(true);
     }
   };
+
+  // Función para manejar el cierre del modal de invitado
+  const handleGuestModalClose = () => {
+    setShowGuestModal(false);
+    navigate('/login'); // Redirige al login después de que el usuario cierre el modal
+  };
+
+  // Función para manejar el cierre del modal de funcionalidad futura
+  const handleFutureFeatureModalClose = () => {
+    setShowFutureFeatureModal(false);
+    // Podrías añadir lógica adicional aquí si es necesario
+  };
+
 
   return (
     <div className="home-container">

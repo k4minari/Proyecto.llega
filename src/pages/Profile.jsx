@@ -1,6 +1,7 @@
 // src/pages/Profile.jsx
 
 import React, { useState, useEffect } from 'react';
+import './Profile.css'
 
 const Profile = () => {
   // En un futuro, los datos vendrían de Firebase

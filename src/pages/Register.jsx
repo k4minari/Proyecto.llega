@@ -7,17 +7,23 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ /* ... */ });
+  const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => { /* ... */ };
-
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    console.log('Form data:', formData);
 
     if (formData.password !== formData.confirmPassword) {
       setError('Las contraseñas no coinciden.');
@@ -28,6 +34,8 @@ const Register = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, formData.correo, formData.password);
       const user = userCredential.user;
+
+      console.log('User created:', user);
 
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
@@ -41,6 +49,7 @@ const Register = () => {
       navigate('/');
 
     } catch (error) {
+      console.error('Registration error:', error);
       if (error.code === 'auth/email-already-in-use') {
         setError('Este correo electrónico ya está registrado.');
       } else if (error.code === 'auth/weak-password') {

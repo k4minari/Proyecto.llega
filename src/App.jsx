@@ -21,6 +21,17 @@ import ProtectedRoute from './components/ProtectedRoute';         // Guardián p
 import AdminProtectedRoute from './components/AdminProtectedRoute'; // Guardián para administradores
 import ChatbotWidget from './components/ChatbotWidget';         // Tu chatbot
 import useAuth from './hooks/useAuth';                          // Hook para saber quién está logueado
+import EspaciosPorCategoria from './pages/EspaciosPorCategoria';
+import AdminEspaciosPorCategoria from './pages/AdminEspaciosPorCategoria';
+import EditarEspacio from './pages/AdminEditarEspacio.jsx';
+import AdminCrearEspacio from './pages/AdminCrearEspacio';
+import FeedbackDetail from './pages/FeedbackDetail';
+
+import FeedbackForm from './pages/FeedbackForm';
+import ReservationQR from './pages/ReservationQR';
+import AdminQRVerify from './pages/AdminQRVerify';
+
+
 
 // --- 4. Import de tus Estilos Globales ---
 import './App.css';
@@ -58,6 +69,9 @@ function App() {
           path="/reserva/:spaceId" 
           element={<ProtectedRoute><Reservation /></ProtectedRoute>} 
         />
+        <Route path="/espacios" element={<EspaciosPorCategoria />} />
+        <Route path="/feedback/:id"   element={<ProtectedRoute><FeedbackForm /></ProtectedRoute>}/>
+        <Route path="/feedback-detail/:id" element={<ProtectedRoute><FeedbackDetail /></ProtectedRoute>} />
         {/* ▼▼▼ RUTAS NUEVAS AÑADIDAS ▼▼▼ */}
         <Route 
           path="/pago/:reservationId" 
@@ -79,7 +93,12 @@ function App() {
             </AdminProtectedRoute>
           }
         />
-
+        <Route path="/admin/espacios" element={<ProtectedRoute><AdminEspaciosPorCategoria /></ProtectedRoute>} />
+        <Route path="/admin/editar-espacio/:id" element={<ProtectedRoute><EditarEspacio /></ProtectedRoute>} />
+        <Route path="/admin/espacios/crear" element={<ProtectedRoute><AdminCrearEspacio /></ProtectedRoute>} />
+        <Route path="/qr/:id" element={<ProtectedRoute><ReservationQR /></ProtectedRoute>} />
+        <Route path="/admin/qr-verify" element={<ProtectedRoute><AdminQRVerify /></ProtectedRoute>} />
+        <Route path="/admin-qr-verify" element={<ProtectedRoute><AdminQRVerify /></ProtectedRoute>} />
         {/* --- Ruta para Páginas No Encontradas (404) --- */}
         <Route path="*" element={
           <div style={{ textAlign: 'center', marginTop: '50px' }}>

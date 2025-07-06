@@ -5,39 +5,30 @@
   align-items: center;
   height: 100vh;
   background-color: #f4f4f9;
-  padding: 20px; /* Añadido para evitar que el contenido toque los bordes en pantallas muy pequeñas */
-  box-sizing: border-box; /* Asegura que el padding no aumente el tamaño total */
 }
-
 .login-box {
   padding: 40px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 400px;
-  max-width: 90%; /* Asegura que la caja no sea más ancha que la pantalla */
   text-align: center;
 }
-
 .input-group {
   margin-bottom: 20px;
   text-align: left;
 }
-
 .input-group label {
   display: block;
   margin-bottom: 5px;
   color: #555;
 }
-
 .input-group input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box; /* Importante para que el padding no desborde el 100% de ancho */
 }
-
 .login-button {
   width: 100%;
   padding: 12px;
@@ -48,13 +39,10 @@
   cursor: pointer;
   font-size: 16px;
   margin-top: 10px;
-  box-sizing: border-box;
 }
-
 .login-button:disabled {
   background-color: #ccc;
 }
-
 .google-login-button {
   width: 50px;
   height: 50px;
@@ -64,56 +52,16 @@
   cursor: pointer;
   font-size: 20px;
   font-weight: bold;
-  display: flex; /* Centrar el contenido si es un ícono de Google */
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto; /* Centrar el botón si está solo */
 }
-
 .divider {
   margin: 20px 0;
   color: #888;
 }
-
 .error-message {
   color: red;
   margin-bottom: 15px;
 }
-
 .forgot-password, .register-link a {
   color: #ff8c00;
   text-decoration: none;
-}
-
-/* --- Media Queries para dispositivos móviles --- */
-
-/* Pantallas pequeñas (ej. teléfonos en modo vertical) */
-@media (max-width: 768px) {
-  .login-box {
-    padding: 25px; /* Reduce el padding para pantallas más pequeñas */
-    width: 95%; /* Hace que la caja ocupe más ancho en pantallas pequeñas */
-    box-shadow: none; /* Opcional: Elimina la sombra para un look más limpio en móvil */
-    border-radius: 0; /* Opcional: Quita los bordes redondeados para que ocupe todo el ancho */
-  }
-
-  .login-container {
-    padding: 0; /* Elimina el padding del contenedor en pantallas muy pequeñas */
-  }
-}
-
-/* Pantallas aún más pequeñas (ej. teléfonos antiguos o muy compactos) */
-@media (max-width: 480px) {
-  .login-box {
-    padding: 20px; /* Reduce aún más el padding */
-  }
-
-  .input-group label {
-    font-size: 0.9em; /* Reduce el tamaño de la fuente de las etiquetas */
-  }
-
-  .input-group input,
-  .login-button {
-    padding: 10px; /* Ajusta el padding de los inputs y botones */
-    font-size: 15px; /* Reduce el tamaño de la fuente */
-  }
 }

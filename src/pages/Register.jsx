@@ -54,9 +54,54 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-container">
-      {/* ... Tu formulario JSX aquí ... */}
-    </div>
+      <div className="auth-container">
+        <div className="auth-form">
+          <h2 className="auth-title">Crear Cuenta</h2>
+          <form onSubmit={handleRegister}>
+            <div className="input-row">
+              <div className="input-group">
+                <label>Nombre</label>
+                <input type="text" name="nombre" onChange={handleChange} required/>
+              </div>
+              <div className="input-group">
+                <label>Apellido</label>
+                <input type="text" name="apellido" onChange={handleChange} required/>
+              </div>
+            </div>
+            <div className="input-group">
+              <label>Carnet</label>
+              <input type="text" name="carnet" onChange={handleChange} required/>
+            </div>
+            <div className="input-group">
+              <label>Correo Unimet</label>
+              <input type="email" name="correo" onChange={handleChange} required/>
+            </div>
+            <div className="input-group">
+              <label>Nombre de usuario</label>
+              <input type="text" name="usuario" onChange={handleChange} required/>
+            </div>
+            <div className="input-row">
+              <div className="input-group">
+                <label>Contraseña</label>
+                <input type="password" name="password" onChange={handleChange} required/>
+              </div>
+              <div className="input-group">
+                <label>Confirmar Contraseña</label>
+                <input type="password" name="confirmPassword" onChange={handleChange} required/>
+              </div>
+            </div>
+
+            {error && <p className="error-message">{error}</p>}
+
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
+            </button>
+          </form>
+          <div className="switch-auth">
+            ¿Ya tienes una cuenta? <Link to="/login">Iniciar sesión</Link>
+          </div>
+        </div>
+      </div>
   );
 };
 

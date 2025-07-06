@@ -2,121 +2,108 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { db, auth } from '../firebase/config';
 import { doc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase/config';
+import useAuth from '../hooks/useAuth';
 
 const Reservation = () => {
-  const { spaceId } = useParams(); // Obtiene el ID del espacio desde la URL
-  const navigate = useNavigate();
-  const [spaceData, setSpaceData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [reserving, setReserving] = useState(false); // Estado para el botón de reservar
+    const { spaceId } = useParams();
+    const [space, setSpace] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { currentUser } = useAuth();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchSpaceData = async () => {
-      setLoading(true);
-      try {
-        const docRef = doc(db, 'espacios', spaceId);
-        const docSnap = await getDoc(docRef);
+    useEffect(() => {
+        const fetchSpace = async () => {
+            if (!spaceId) {
+                setError("No se proporcionó un ID de espacio.");
+                setLoading(false);
+                return;
+            }
+            try {
+                // Esta es la única consulta a la base de datos que necesitamos ahora
+                const docRef = doc(db, 'spaces', spaceId);
+                const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          setSpaceData(docSnap.data());
-        } else {
-          console.log("No se encontró el documento del espacio!");
-          setSpaceData(null); // Marcar que no se encontró
+                if (docSnap.exists()) {
+                    setSpace({ id: docSnap.id, ...docSnap.data() });
+                } else {
+                    setError("El documento del espacio no fue encontrado.");
+                }
+            } catch (err) {
+                console.error("Error al obtener el documento:", err);
+                setError("Ocurrió un error técnico al buscar el espacio.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSpace();
+    }, [spaceId]);
+
+    // --- Hemos ELIMINADO por completo el segundo useEffect que buscaba al supervisor ---
+
+    const handleReservation = async () => {
+        // ... (La lógica de esta función no cambia)
+        if (!currentUser) {
+            navigate('/login');
+            return;
         }
-      } catch (error) {
-        console.error("Error al obtener datos del espacio:", error);
-      }
-      setLoading(false);
+        try {
+            const reservationData = {
+                userId: currentUser.uid,
+                spaceId: space.id,
+                spaceName: space.name,
+                status: 'pending',
+                createdAt: serverTimestamp(),
+                price: space.price,
+            };
+            const docRef = await addDoc(collection(db, "reservations"), reservationData);
+            navigate(`/pago/${docRef.id}`);
+        } catch (error) {
+            console.error("Error al crear la reserva: ", error);
+            alert("Hubo un problema al intentar crear tu reserva.");
+        }
     };
 
-    if (spaceId) {
-      fetchSpaceData();
-    }
-  }, [spaceId]);
-
-  const handleReserveClick = async () => {
-    setReserving(true);
-    const currentUser = auth.currentUser;
-
-    if (!currentUser) {
-      alert("Debes iniciar sesión para poder reservar.");
-      navigate('/login');
-      setReserving(false);
-      return;
+    if (loading) return <div className="page-container"><h2>Cargando...</h2></div>;
+    if (error || !space) {
+        return (
+            <div className="page-container" style={{ textAlign: 'center' }}>
+                <h1>Espacio no encontrado</h1>
+                <p>{error || "El espacio que buscas no existe o fue eliminado."}</p>
+                <Link to="/">Volver al inicio</Link>
+            </div>
+        );
     }
 
-    try {
-      // Creamos un nuevo documento en la colección "reservas"
-      await addDoc(collection(db, "reservas"), {
-        userId: currentUser.uid,
-        spaceId: spaceId,
-        spaceName: spaceData.nombre,
-        reservationDate: serverTimestamp(),
-        status: "confirmada"
-      });
-
-      alert(`¡Reserva para ${spaceData.nombre} realizada con éxito!`);
-      navigate('/'); // Volvemos al home después de reservar
-      
-    } catch (error) {
-      console.error("Error al guardar la reserva: ", error);
-      alert("Hubo un problema al procesar tu reserva. Por favor, inténtalo de nuevo.");
-    } finally {
-      setReserving(false);
-    }
-  };
-
-  if (loading) {
-    return <div>Cargando información del espacio...</div>;
-  }
-
-  if (!spaceData) {
+    // --- El JSX actualizado que muestra la información directamente ---
     return (
-      <div className="page-container">
-        <h1>Espacio no encontrado</h1>
-        <p>El espacio que buscas no existe o fue eliminado.</p>
-        <Link to="/">Volver al inicio</Link>
-      </div>
+        <div className="page-container" style={{maxWidth: '500px', margin: '40px auto', textAlign: 'center'}}>
+            <h1 className="page-title">Página de Reserva</h1>
+            <div className="reservation-card-detail" style={{background: 'white', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)'}}>
+                <img src={space.imageUrl} alt={space.name} style={{width: '100%', borderRadius: '8px', marginBottom: '20px'}} />
+                <h2>{space.name}</h2>
+                <p>{space.description}</p>
+                <hr style={{margin: '15px 0'}} />
+                <p><strong>Precio por hora: ${space.price}</strong></p>
+                
+                {/* ▼▼▼ ¡AQUÍ ESTÁ EL CAMBIO CLAVE! ▼▼▼ */}
+                {/* Mostramos el supervisor si el campo supervisorId existe y tiene contenido */}
+                {space.supervisorId ? (
+                    <p>Supervisor de espacio: <strong>{space.supervisorId}</strong></p>
+                ) : (
+                    <p>Supervisor de espacio: No asignado</p>
+                )}
+                {/* ▲▲▲ ¡FIN DEL CAMBIO CLAVE! ▲▲▲ */}
+                
+                <button onClick={handleReservation} className="btn-primary" style={{width: '100%', marginTop: '20px'}}>
+                    Reservar Ya
+                </button>
+            </div>
+        </div>
     );
-  }
-
-  return (
-    <div className="page-container" style={{maxWidth: '1200px'}}>
-      <header className="home-header">
-        {/* ... Header sin cambios ... */}
-      </header>
-
-      <h2 className="page-title" style={{marginTop: '40px'}}>Página de Reserva</h2>
-      
-      <div className="reservation-content">
-        <div className="reservation-image-container">
-          <img src={spaceData.imageUrl || 'https://via.placeholder.com/600x400'} alt={spaceData.nombre} />
-        </div>
-        <div className="reservation-details-container">
-          <h1>{spaceData.nombre}</h1>
-          <p className="space-type">{spaceData.tipo}</p>
-          <p className="space-price">{spaceData.precio}</p>
-          <p className="space-description">{spaceData.descripcion}</p>
-          
-          <button 
-            onClick={handleReserveClick} 
-            className="btn-primary" 
-            disabled={reserving}
-            style={{width: '100%', marginTop: '20px', padding: '15px'}}
-          >
-            {reserving ? 'Procesando Reserva...' : 'RESERVAR YA'}
-          </button>
-
-          <div className="supervisor-info">
-            <h4>Supervisor de espacio:</h4>
-            <p>{spaceData.supervisor}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 };
 
 export default Reservation;

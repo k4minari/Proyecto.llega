@@ -31,7 +31,6 @@ const SpaceTypeCard = ({ title, description, imageUrl, onClick }) => (
 );
 
 
-
 const Home = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();

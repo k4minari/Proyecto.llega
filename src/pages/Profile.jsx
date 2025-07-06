@@ -1,73 +1,120 @@
 // src/pages/Profile.jsx
 
 import React, { useState, useEffect } from 'react';
-import './Profile.css'
+import { useNavigate } from 'react-router-dom';
+import { auth, db } from '../firebase/config';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 const Profile = () => {
-  // En un futuro, los datos vendrían de Firebase
-  const [profileData, setProfileData] = useState({
-    nombreDeUsuario: 'NombreDeUsuario',
-    nombre: 'Frank',
-    apellido: 'Sandoval',
-    carnet: '2023-1234',
-    descripcion: 'Supervisor de espacio en Centro Mundo X.',
-  });
-  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  useEffect(() => {
+    const fetchOrCreateProfile = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDocRef = doc(db, 'users', user.uid);
+
+        try {
+          const docSnap = await getDoc(userDocRef);
+
+          if (docSnap.exists()) {
+            setProfileData(docSnap.data());
+          } else {
+            const newProfileData = {
+              uid: user.uid,
+              nombre: user.displayName?.split(' ')[0] || '',
+              apellido: user.displayName?.split(' ')[1] || '',
+              carnet: '',
+              nombreDeUsuario: user.displayName || user.email,
+              correo: user.email,
+              descripcion: '¡Hola! Soy un nuevo usuario en Llega.',
+            };
+            await setDoc(userDocRef, newProfileData);
+            setProfileData(newProfileData);
+          }
+        } catch (err) {
+          console.error("Error al cargar o crear el perfil:", err);
+          setError("No se pudieron cargar los datos del perfil.");
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchOrCreateProfile();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfileData(prev => ({ ...prev, [name]: value }));
+    setProfileData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log('Actualizando perfil:', profileData);
-    // Aquí irá la lógica para actualizar los datos en Firestore
-    setMessage('Información actualizada con éxito (simulación).');
-    setTimeout(() => setMessage(''), 3000);
+    const user = auth.currentUser;
+    if (!user) return;
+
+    setSuccess('');
+    setError('');
+
+    try {
+      const userDocRef = doc(db, 'users', user.uid);
+      await updateDoc(userDocRef, profileData);
+      setSuccess('¡Perfil actualizado con éxito!');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err) {
+      console.error("Error al actualizar el perfil:", err);
+      setError("Hubo un error al guardar los cambios.");
+    }
   };
-  
+
+  if (loading) {
+    return <div className="page-container">Cargando perfil...</div>;
+  }
+
+  if (error) {
+    return <div className="page-container">{error}</div>;
+  }
+
   return (
-    <div className="page-container">
-      <h2 className="page-title">Modificar Perfil</h2>
-      <div className="profile-card">
-        <div className="profile-header">
-          <div className="avatar-placeholder">👤</div>
-          <h3>{profileData.nombreDeUsuario}</h3>
+      <div className="page-container">
+        <div className="form-container">
+          <form onSubmit={handleUpdate} className="profile-form">
+            <h2 className="form-title">Modificar Perfil</h2>
+            <div className="input-group">
+              <label>Nombre de usuario</label>
+              <input type="text" name="nombreDeUsuario" value={profileData?.nombreDeUsuario || ''} onChange={handleChange} />
+            </div>
+            <div className="input-row">
+              <div className="input-group">
+                <label>Nombre</label>
+                <input type="text" name="nombre" value={profileData?.nombre || ''} onChange={handleChange} />
+              </div>
+              <div className="input-group">
+                <label>Apellido</label>
+                <input type="text" name="apellido" value={profileData?.apellido || ''} onChange={handleChange} />
+              </div>
+            </div>
+            <div className="input-group">
+              <label>Carnet</label>
+              <input type="text" name="carnet" value={profileData?.carnet || ''} onChange={handleChange} />
+            </div>
+            <div className="input-group">
+              <label>Descripción</label>
+              <textarea name="descripcion" value={profileData?.descripcion || ''} onChange={handleChange} rows="4"></textarea>
+            </div>
+
+            {error && <p className="error-message">{error}</p>}
+            {success && <p className="success-message">{success}</p>}
+
+            <button type="submit" className="btn-primary">Actualizar Información</button>
+            <button type="button" onClick={() => navigate('/')} className="btn-cancel">Cancelar</button>
+          </form>
         </div>
-        <form onSubmit={handleUpdate} className="profile-form">
-          <div className="input-group">
-            <label>Nombre de usuario</label>
-            <input type="text" name="nombreDeUsuario" value={profileData.nombreDeUsuario} onChange={handleChange} />
-          </div>
-          <div className="input-row">
-            <div className="input-group">
-              <label>Nombre</label>
-              <input type="text" name="nombre" value={profileData.nombre} onChange={handleChange} />
-            </div>
-            <div className="input-group">
-              <label>Apellido</label>
-              <input type="text" name="apellido" value={profileData.apellido} onChange={handleChange} />
-            </div>
-          </div>
-          <div className="input-group">
-            <label>Carnet</label>
-            <input type="text" name="carnet" value={profileData.carnet} onChange={handleChange} />
-          </div>
-          <div className="input-group">
-            <label>Descripción</label>
-            <textarea name="descripcion" value={profileData.descripcion} onChange={handleChange} rows="4"></textarea>
-          </div>
-
-          {message && <p className="success-message">{message}</p>}
-
-          <div className="form-actions">
-            <button type="button" className="btn btn-secondary">Cancelar</button>
-            <button type="submit" className="btn btn-primary">Actualizar Información</button>
-          </div>
-        </form>
       </div>
-    </div>
   );
 };
 

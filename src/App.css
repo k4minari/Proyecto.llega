@@ -5,13 +5,12 @@
    ================================= */
 :root {
   --primary-orange: #ff8c00;
+  --primary-blue: #007bff;
   --primary-dark: #333;
   --secondary-dark: #666;
-  --background-light: #f4f4f9;
+  --background-light: #f8f9fa;
   --white: #fff;
-  --border-color: #ccc;
-  --error-red: #d9534f;
-  --success-green: #5cb85c;
+  --border-color: #dee2e6;
   --body-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -35,7 +34,7 @@ a:hover {
 }
 
 /* =================================
-   2. Estilos de Autenticación (Login/Register)
+   2. Estilos de Autenticación
    ================================= */
 .auth-container {
   display: flex;
@@ -54,64 +53,15 @@ a:hover {
   max-width: 450px;
   text-align: center;
 }
-
-.auth-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 30px;
-  letter-spacing: -1px;
-}
-
-.input-group {
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--secondary-dark);
-}
-
-.input-group input,
-.input-group textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  box-sizing: border-box;
-  font-size: 1rem;
-}
-
-.input-row {
-  display: flex;
-  gap: 20px;
-}
-
-.input-row > .input-group {
-  flex: 1;
-}
-
-.forgot-password {
-  display: block;
-  text-align: right;
-  margin-bottom: 20px;
-  font-size: 0.9em;
-}
-
-.divider {
-  margin: 25px 0;
-  color: var(--secondary-dark);
-  font-size: 0.9em;
-}
-
-.switch-auth {
-  margin-top: 20px;
-}
+/* ... otros estilos de auth ... */
+.input-group { margin-bottom: 20px; text-align: left; }
+.input-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+.input-group input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; }
+.input-row { display: flex; gap: 20px; }
+.input-row > .input-group { flex: 1; }
 
 /* =================================
-   3. Botones (Globales y Específicos)
+   3. Botones
    ================================= */
 .btn-primary {
   width: 100%;
@@ -123,54 +73,17 @@ a:hover {
   font-weight: bold;
   background-color: var(--primary-orange);
   color: var(--white);
-  transition: background-color 0.2s;
-}
-.btn-primary:hover {
-  background-color: #e67e00;
-}
-.btn-primary:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
 }
 
-.provider-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.btn-google, .btn-github {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 1px solid var(--border-color);
-  background: var(--white);
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: var(--primary-dark);
-  transition: background-color 0.2s;
-}
-.btn-google:hover, .btn-github:hover {
-  background-color: #f2f2f2;
-}
-.btn-google:disabled, .btn-github:disabled {
-  background-color: #eee;
-  cursor: not-allowed;
-}
-
-.btn-github svg {
-  fill: #333;
-}
-
+.provider-buttons { display: flex; justify-content: center; gap: 20px; }
+.btn-google, .btn-github { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--border-color); background: var(--white); cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1.5em; }
+.btn-github svg { fill: #333; }
 
 /* =================================
    4. Página de Inicio (Home)
    ================================= */
-.home-container {
+/* Estilos base para pantallas grandes */
+.home-container, .page-container {
   width: 100%;
 }
 
@@ -178,12 +91,9 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 5%;
+  padding: 15px 80px;
   background: var(--white);
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .home-header .logo {
@@ -208,11 +118,7 @@ a:hover {
 
 .hero-section {
   text-align: center;
-  padding: 60px 20px;
-  background-color: #343a40;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://via.placeholder.com/1200x400'); /* Reemplaza con una imagen real */
-  background-size: cover;
-  background-position: center;
+  padding: 80px 20px;
   color: var(--white);
 }
 
@@ -235,8 +141,8 @@ a:hover {
 }
 
 .spaces-section {
-  padding: 40px 5%;
-  max-width: 1200px;
+  padding: 60px 80px;
+  max-width: none;
   margin: 0 auto;
 }
 
@@ -248,140 +154,348 @@ a:hover {
 
 .spaces-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 30px;
 }
 
-.space-card, .space-requested-card {
+.space-card {
   background: var(--white);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  display: flex;
-  flex-direction: column;
 }
 
-.space-card-img, .space-requested-card img {
+.space-card-img {
   width: 100%;
-  height: 180px;
+  height: 200px;
   object-fit: cover;
 }
 
 .space-card-body {
-  padding: 20px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+  padding: 25px;
 }
+
 .space-card-body h4 {
   margin-top: 0;
 }
+
 .space-card-body p {
   color: var(--secondary-dark);
   margin-bottom: 20px;
-  flex-grow: 1;
-}
-.space-card .btn-secondary{
-    width: auto;
-    padding: 10px 15px;
-    background-color: #e9ecef;
-    color: var(--primary-dark);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    align-self: flex-start;
 }
 
-.space-requested-card h4{
-    padding: 20px;
-    margin: 0;
+.space-card .btn-secondary {
+  width: auto;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
 }
 
 .home-footer {
   text-align: center;
-  padding: 20px;
+  padding: 30px;
   background: #343a40;
   color: #adb5bd;
-  margin-top: 40px;
+}
+
+/* --- Media Queries para dispositivos móviles --- */
+
+/* Para pantallas más pequeñas (ej. tablets en orientación retrato y móviles grandes) */
+@media (max-width: 768px) {
+  .home-header {
+    flex-direction: column; /* Apila los elementos del header */
+    padding: 15px 20px; /* Reduce el padding horizontal */
+    align-items: flex-start; /* Alinea los elementos a la izquierda */
+  }
+
+  .home-header nav {
+    margin-top: 10px; /* Añade espacio entre el logo y la navegación */
+    flex-direction: column; /* Apila los enlaces de navegación */
+    gap: 10px; /* Reduce el espacio entre los enlaces */
+    width: 100%; /* Ocupa todo el ancho disponible */
+  }
+
+  .home-header nav a,
+  .home-header .btn-profile {
+    width: 100%; /* Los enlaces y el botón ocupan todo el ancho */
+    text-align: center; /* Centra el texto */
+    padding: 10px 0; /* Ajusta el padding vertical */
+  }
+
+  .home-header .btn-profile {
+    margin-top: 10px; /* Espacio adicional para el botón */
+  }
+
+  .hero-section {
+    padding: 50px 15px; /* Reduce el padding de la sección hero */
+  }
+
+  .hero-section h2 {
+    font-size: 2rem; /* Reduce el tamaño del título */
+  }
+
+  .search-bar {
+    flex-direction: column; /* Apila el input y el botón de búsqueda */
+    gap: 15px; /* Aumenta el espacio entre ellos */
+  }
+
+  .search-bar input {
+    width: 90%; /* Ocupa un mayor porcentaje del ancho */
+    max-width: 300px; /* Limita el ancho máximo para no ser demasiado grande en tablets */
+  }
+
+  .spaces-section {
+    padding: 40px 20px; /* Reduce el padding de la sección de espacios */
+  }
+
+  .spaces-grid {
+    grid-template-columns: 1fr; /* Una sola columna para las tarjetas */
+  }
+}
+
+/* Para dispositivos móviles muy pequeños (ej. teléfonos en orientación vertical) */
+@media (max-width: 480px) {
+  .home-header {
+    padding: 10px 15px; /* Más ajustes en el padding del header */
+  }
+
+  .home-header .logo {
+    font-size: 1.5rem; /* Tamaño del logo un poco más pequeño */
+  }
+
+  .hero-section h2 {
+    font-size: 1.8rem; /* Título aún más pequeño en pantallas muy chicas */
+  }
+
+  .search-bar input {
+    width: 95%; /* Ocupa casi todo el ancho disponible */
+  }
+
+  .spaces-section h3 {
+    font-size: 1.5rem; /* Tamaño del título de espacios */
+  }
+
+  .space-card-body {
+    padding: 15px; /* Reduce el padding interno de las tarjetas */
+  }
+
+  .home-footer {
+    padding: 20px 15px; /* Ajusta el padding del footer */
+  }
 }
 
 /* =================================
-   5. Página de Perfil
+   5. Página de Reserva (NUEVO)
    ================================= */
-.page-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
-}
-
-.page-title {
-  margin-bottom: 30px;
-}
-
-.profile-card {
-  background: var(--white);
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.profile-header {
+.reservation-content {
   display: flex;
-  align-items: center;
-  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: 40px;
+  background: var(--white);
+  padding: 40px;
+  border-radius: 8px;
+}
+.reservation-image-container {
+  flex: 1 1 400px;
+}
+.reservation-image-container img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.reservation-details-container {
+  flex: 1 1 400px;
+  display: flex;
+  flex-direction: column;
+}
+.reservation-details-container h1 {
+  margin-top: 0;
+  font-size: 2.5rem;
+}
+.space-type {
+  font-size: 1.1rem;
+  color: var(--secondary-dark);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.space-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-orange);
+}
+.space-description {
+  color: var(--primary-dark);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+.supervisor-info {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
 }
 
-.avatar-placeholder {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: #e9ecef;
+/* =================================
+   6. Estilos del Chatbot
+   ================================= */
+.react-chatbot-kit-chat-container {
+  width: 340px;
+}
+
+.user-actions {
+  display: flex;
+  gap: 15px;
+}
+.btn-logout {
+  background: var(--error-red);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.admin-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+.admin-nav button {
+  padding: 10px 15px;
+  border: 1px solid var(--border-color);
+  background: var(--white);
+  cursor: pointer;
+  border-radius: 4px;
+}
+.admin-nav button.active {
+  background: var(--primary-dark);
+  color: var(--white);
+  border-color: var(--primary-dark);
+}
+
+.btn-admin {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2.5rem;
-  margin-right: 20px;
+  min-height: 100vh;
+  background-color: #f5f5f5;
 }
 
-.profile-form .form-actions {
+.auth-form {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-form button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-cancel {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-cancel:hover {
+  background-color: #333;
+}
+
+
+.profile-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chatbot-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.close-button:hover {
+  background-color: #ff1a1a;
+}
+
+.chatbot-container {
+  position: relative;
+  width: 350px;
+  height: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+  z-index: 1000;
+}
+.open-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.profile-form .form-actions .btn {
-  width: auto;
-  padding: 10px 20px;
-}
-
-.profile-form .btn-secondary {
-   background-color: #6c757d;
-   color: white;
-   border: none;
-   border-radius: 4px;
-   cursor: pointer;
-}
-
-/* =================================
-   6. Mensajes y Utilidades
-   ================================= */
-.error-message {
-  color: var(--error-red);
-  margin: -10px 0 15px 0;
-  font-size: 0.9em;
-  text-align: left;
-}
-.success-message {
-  color: var(--success-green);
-  margin-bottom: 15px;
-  font-size: 0.9em;
-}
-
-/* =================================
-   7. Estilos del Chatbot (react-chatbot-kit)
-   ================================= */
-/* Importa los estilos base en ChatbotWidget.jsx con: import 'react-chatbot-kit/build/main.css'; */
-.react-chatbot-kit-chat-container {
-  width: 320px; /* Ajusta el ancho si es necesario */
+  justify-content: center;
+  align-items: center;
 }

@@ -169,38 +169,97 @@
 }
 
 /* --- Adaptación a Dispositivos Móviles --- */
+/* Media query para pantallas con un ancho máximo de 768px (tabletas y móviles) */
 @media (max-width: 768px) {
-    .profile-card {
-        padding: 20px;
-        margin: 10px; /* Margen en pantallas pequeñas */
+    .page-container {
+        padding: 15px; /* Reduce el padding general en pantallas pequeñas */
     }
 
     .page-title {
-        font-size: 2em;
+        font-size: 2em; /* Reduce el tamaño de la fuente del título */
+        margin-bottom: 20px; /* Ajusta el margen inferior del título */
+    }
+
+    .profile-card {
+        padding: 20px; /* Reduce el padding interno de la tarjeta */
+        margin: 15px; /* Agrega un margen alrededor de la tarjeta para que no se pegue a los bordes */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* Sombra un poco más suave para móviles */
     }
 
     .avatar-placeholder {
-        width: 100px;
+        width: 100px; /* Reduce el tamaño del avatar */
         height: 100px;
-        font-size: 3.5em;
+        font-size: 3.5em; /* Ajusta el tamaño del icono dentro del avatar */
+        margin-bottom: 10px; /* Reduce el margen debajo del avatar */
     }
 
     .profile-header h3 {
-        font-size: 1.5em;
+        font-size: 1.5em; /* Reduce el tamaño de la fuente del nombre en el encabezado */
+    }
+
+    .profile-form {
+        gap: 15px; /* Reduce el espacio entre los grupos de input */
+    }
+
+    .input-group label {
+        font-size: 0.9em; /* Reduce ligeramente el tamaño de la fuente de las etiquetas */
+        margin-bottom: 5px; /* Reduce el margen inferior de las etiquetas */
+    }
+
+    .input-group input[type="text"],
+    .input-group textarea {
+        padding: 10px; /* Reduce el padding de los inputs */
+        font-size: 0.95em; /* Ajusta el tamaño de la fuente en los inputs */
     }
 
     .input-row {
-        flex-direction: column; /* Apila los inputs en filas en móviles */
-        gap: 15px;
+        flex-direction: column; /* Apila los inputs en filas verticalmente en pantallas pequeñas */
+        gap: 15px; /* Espacio entre los inputs apilados */
     }
 
     .form-actions {
-        flex-direction: column; /* Apila los botones en móviles */
-        gap: 10px;
+        flex-direction: column; /* Apila los botones verticalmente en pantallas pequeñas */
+        gap: 10px; /* Espacio entre los botones apilados */
+        margin-top: 20px; /* Ajusta el margen superior de los botones */
     }
 
     .btn {
-        width: 100%; /* Botones ocupan todo el ancho en móviles */
-        min-width: unset; /* Elimina el ancho mínimo para que se ajusten */
+        width: 100%; /* Los botones ocupan todo el ancho disponible */
+        min-width: unset; /* Elimina el ancho mínimo para que se ajusten al 100% */
+        padding: 10px 20px; /* Reduce el padding de los botones */
+        font-size: 1em; /* Ajusta el tamaño de la fuente de los botones */
+    }
+}
+
+/* Media query adicional para dispositivos muy pequeños (teléfonos en modo vertical) */
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.8em; /* Un poco más pequeño para pantallas ultra pequeñas */
+    }
+
+    .profile-card {
+        padding: 15px; /* Más padding reducido */
+        margin: 10px; /* Más margen reducido */
+    }
+
+    .avatar-placeholder {
+        width: 80px; /* Avatar aún más pequeño */
+        height: 80px;
+        font-size: 3em;
+    }
+
+    .profile-header h3 {
+        font-size: 1.3em; /* Título del perfil más pequeño */
+    }
+
+    .input-group input[type="text"],
+    .input-group textarea {
+        padding: 8px; /* Padding mínimo para inputs */
+        font-size: 0.9em;
+    }
+
+    .btn {
+        padding: 8px 15px; /* Padding mínimo para botones */
+        font-size: 0.95em;
     }
 }

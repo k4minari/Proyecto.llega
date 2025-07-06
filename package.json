@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.8.3",
     "firebase": "^11.9.1",
     "react": "^19.1.0",
     "react-chatbot-kit": "^2.2.2",

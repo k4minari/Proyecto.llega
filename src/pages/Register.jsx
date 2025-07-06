@@ -46,7 +46,7 @@ const Register = () => {
       } else if (error.code === 'auth/weak-password') {
         setError('La contraseña debe tener al menos 6 caracteres.');
       } else {
-        setError(error.code);
+        setError('Ocurrió un error al crear la cuenta.');
       }
     } finally {
       setLoading(false);

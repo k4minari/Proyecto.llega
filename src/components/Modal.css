@@ -1,0 +1,58 @@
+
+.modal-overlay {
+  position: fixed; /* Fija el modal sobre todo el contenido */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px; /* Ancho máximo para el modal */
+  position: relative; /* Para posicionar el botón de cierre */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.modal-close-button {
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-close-button:hover {
+  color: #000;
+}
+
+.modal-body p {
+  line-height: 1.6;
+  color: #555;
+}
+
+.modal-footer {
+  margin-top: 20px;
+  text-align: right;
+}

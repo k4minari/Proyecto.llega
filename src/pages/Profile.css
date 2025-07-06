@@ -1,0 +1,265 @@
+/* Colores de la marca */
+:root {
+    --primary-color: #FF8201; /* Color principal para botones y acentos */
+    --secondary-color: #6c757d; /* Gris para botones secundarios */
+    --text-color: #333;
+    --background-white: #ffffff;
+    --border-color: #e0e0e0;
+    --success-color: #28a745;
+}
+
+/* --- Estilos Generales y Centrado de la Página --- */
+.page-container {
+    background-color: var(--background-white); /* Fondo blanco para toda la página/vista */
+    min-height: 100vh; /* Ocupa al menos el alto completo de la ventana */
+    display: flex;
+    flex-direction: column; /* Organiza los elementos verticalmente */
+    align-items: center; /* Centra horizontalmente los elementos hijos */
+    padding: 20px; /* Espaciado interno general */
+    box-sizing: border-box; /* Para incluir padding y border en el ancho/alto */
+}
+
+.page-title {
+    color: var(--text-color);
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-align: center; /* Centra el texto del título */
+    width: 100%; /* Asegura que el título ocupe todo el ancho para centrarlo */
+}
+
+/* --- Estilos de la Tarjeta del Perfil --- */
+.profile-card {
+    background-color: var(--background-white);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra más pronunciada */
+    padding: 30px;
+    width: 100%;
+    max-width: 600px; /* Ancho máximo para la tarjeta del perfil */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra el contenido dentro de la tarjeta */
+    margin-bottom: 20px; /* Espacio debajo de la tarjeta */
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.avatar-placeholder {
+    font-size: 4em;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px; /* Centra el avatar */
+    color: #888;
+    border: 2px solid var(--border-color);
+}
+
+.profile-header h3 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.8em;
+}
+
+/* --- Estilos del Formulario --- */
+.profile-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre grupos de input */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--text-color);
+    font-size: 0.95em;
+}
+
+.input-group input[type="text"],
+.input-group textarea {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1em;
+    color: var(--text-color);
+    transition: border-color 0.3s ease;
+}
+
+.input-group input[type="text"]:focus,
+.input-group textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 130, 1, 0.2); /* Sombra de enfoque sutil */
+}
+
+.input-group textarea {
+    resize: vertical; /* Permite redimensionar verticalmente */
+    min-height: 80px;
+}
+
+.input-row {
+    display: flex;
+    gap: 20px; /* Espacio entre los inputs de la misma fila */
+    width: 100%;
+}
+
+.input-row .input-group {
+    flex: 1; /* Permite que los grupos de input ocupen el mismo espacio */
+}
+
+/* --- Mensaje de éxito --- */
+.success-message {
+    background-color: #d4edda;
+    color: var(--success-color);
+    border: 1px solid #c3e6cb;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: -10px; /* Ajusta el margen para que esté más cerca del formulario */
+}
+
+/* --- Estilos de los Botones --- */
+.form-actions {
+    display: flex;
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+    gap: 15px; /* Espacio entre los botones */
+    margin-top: 25px; /* Espacio encima de los botones */
+}
+
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 120px; /* Ancho mínimo para los botones */
+}
+
+.btn-primary {
+    background-color: var(--primary-color); /* Color FF8201 */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #cc6700; /* Un tono un poco más oscuro al pasar el ratón */
+    transform: translateY(-2px); /* Efecto ligero de "levantar" */
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color); /* Gris para "Cancelar" */
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Un tono un poco más oscuro al pasar el ratón */
+    transform: translateY(-2px);
+}
+
+/* --- Adaptación a Dispositivos Móviles --- */
+/* Media query para pantallas con un ancho máximo de 768px (tabletas y móviles) */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 15px; /* Reduce el padding general en pantallas pequeñas */
+    }
+
+    .page-title {
+        font-size: 2em; /* Reduce el tamaño de la fuente del título */
+        margin-bottom: 20px; /* Ajusta el margen inferior del título */
+    }
+
+    .profile-card {
+        padding: 20px; /* Reduce el padding interno de la tarjeta */
+        margin: 15px; /* Agrega un margen alrededor de la tarjeta para que no se pegue a los bordes */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* Sombra un poco más suave para móviles */
+    }
+
+    .avatar-placeholder {
+        width: 100px; /* Reduce el tamaño del avatar */
+        height: 100px;
+        font-size: 3.5em; /* Ajusta el tamaño del icono dentro del avatar */
+        margin-bottom: 10px; /* Reduce el margen debajo del avatar */
+    }
+
+    .profile-header h3 {
+        font-size: 1.5em; /* Reduce el tamaño de la fuente del nombre en el encabezado */
+    }
+
+    .profile-form {
+        gap: 15px; /* Reduce el espacio entre los grupos de input */
+    }
+
+    .input-group label {
+        font-size: 0.9em; /* Reduce ligeramente el tamaño de la fuente de las etiquetas */
+        margin-bottom: 5px; /* Reduce el margen inferior de las etiquetas */
+    }
+
+    .input-group input[type="text"],
+    .input-group textarea {
+        padding: 10px; /* Reduce el padding de los inputs */
+        font-size: 0.95em; /* Ajusta el tamaño de la fuente en los inputs */
+    }
+
+    .input-row {
+        flex-direction: column; /* Apila los inputs en filas verticalmente en pantallas pequeñas */
+        gap: 15px; /* Espacio entre los inputs apilados */
+    }
+
+    .form-actions {
+        flex-direction: column; /* Apila los botones verticalmente en pantallas pequeñas */
+        gap: 10px; /* Espacio entre los botones apilados */
+        margin-top: 20px; /* Ajusta el margen superior de los botones */
+    }
+
+    .btn {
+        width: 100%; /* Los botones ocupan todo el ancho disponible */
+        min-width: unset; /* Elimina el ancho mínimo para que se ajusten al 100% */
+        padding: 10px 20px; /* Reduce el padding de los botones */
+        font-size: 1em; /* Ajusta el tamaño de la fuente de los botones */
+    }
+}
+
+/* Media query adicional para dispositivos muy pequeños (teléfonos en modo vertical) */
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.8em; /* Un poco más pequeño para pantallas ultra pequeñas */
+    }
+
+    .profile-card {
+        padding: 15px; /* Más padding reducido */
+        margin: 10px; /* Más margen reducido */
+    }
+
+    .avatar-placeholder {
+        width: 80px; /* Avatar aún más pequeño */
+        height: 80px;
+        font-size: 3em;
+    }
+
+    .profile-header h3 {
+        font-size: 1.3em; /* Título del perfil más pequeño */
+    }
+
+    .input-group input[type="text"],
+    .input-group textarea {
+        padding: 8px; /* Padding mínimo para inputs */
+        font-size: 0.9em;
+    }
+
+    .btn {
+        padding: 8px 15px; /* Padding mínimo para botones */
+        font-size: 0.95em;
+    }
+}

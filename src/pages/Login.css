@@ -1,34 +1,45 @@
 /* src/pages/Login.css */
+
+/* Estilos base (para pantallas grandes y medianas por defecto) */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100vh; /* Ocupa el 100% de la altura de la ventana */
   background-color: #f4f4f9;
+  padding: 20px; /* Añade un poco de padding para evitar que el contenido toque los bordes en pantallas muy pequeñas */
+  box-sizing: border-box; /* Asegura que el padding no aumente el tamaño total */
 }
+
 .login-box {
   padding: 40px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 400px;
+  width: 400px; /* Ancho fijo para pantallas grandes */
+  max-width: 90%; /* Asegura que no sea más ancho que la pantalla disponible */
   text-align: center;
 }
+
 .input-group {
   margin-bottom: 20px;
   text-align: left;
 }
+
 .input-group label {
   display: block;
   margin-bottom: 5px;
   color: #555;
 }
+
 .input-group input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box; /* Importante para que el padding no desborde el ancho */
 }
+
 .login-button {
   width: 100%;
   padding: 12px;
@@ -40,9 +51,11 @@
   font-size: 16px;
   margin-top: 10px;
 }
+
 .login-button:disabled {
   background-color: #ccc;
 }
+
 .google-login-button {
   width: 50px;
   height: 50px;
@@ -53,15 +66,54 @@
   font-size: 20px;
   font-weight: bold;
 }
+
 .divider {
   margin: 20px 0;
   color: #888;
 }
+
 .error-message {
   color: red;
   margin-bottom: 15px;
 }
+
 .forgot-password, .register-link a {
   color: #ff8c00;
   text-decoration: none;
+}
+/* Para pantallas con un ancho máximo de 600px (típico para celulares en modo retrato) */
+@media (max-width: 600px) {
+  .login-container {
+    /* En móviles, 100vh puede causar problemas con la barra de navegación del navegador */
+    /* Una alternativa puede ser min-height: 100vh; o simplemente dejarlo así y probar */
+    /* Para esta simple página de login, 100vh suele funcionar bien. */
+    align-items: flex-start; /* Alinea al inicio para que el contenido no quede en el centro de una pantalla muy pequeña */
+    padding-top: 50px; /* Añade un poco de espacio desde la parte superior */
+  }
+
+  .login-box {
+    width: 95%; /* Ocupa casi todo el ancho de la pantalla */
+    padding: 20px; /* Reduce el padding para ahorrar espacio */
+    box-shadow: none; /* Opcional: elimina la sombra para un aspecto más "nativo" en móvil */
+    border-radius: 0; /* Opcional: quita los bordes redondeados si ocupa todo el ancho */
+  }
+
+  .google-login-button {
+    width: 40px; /* Podrías reducir el tamaño si lo consideras necesario */
+    height: 40px;
+    font-size: 18px;
+  }
+
+  /* Puedes ajustar otros elementos si es necesario, por ejemplo, el tamaño de fuente */
+  .login-button {
+    font-size: 15px;
+    padding: 10px;
+  }
+}
+
+/* Para pantallas con un ancho máximo de 400px (celulares muy pequeños) */
+@media (max-width: 400px) {
+  .login-box {
+    padding: 15px; /* Más reducción de padding */
+  }
 }

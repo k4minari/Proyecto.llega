@@ -101,8 +101,8 @@ const Reservation = () => {
                 hora: hora || null,
                 verificationCode,
             };
-            const docRef = await addDoc(collection(db, "reservations"), reservationData);
-            navigate(`/pago/${docRef.id}`);
+            //const docRef = await addDoc(collection(db, "reservations"), reservationData);
+            navigate('/pago', { state: { reservationData } });
         } catch (error) {
             console.error("Error al crear la reserva: ", error);
             alert("Hubo un problema al intentar crear tu reserva.");
@@ -151,7 +151,6 @@ const Reservation = () => {
                 </button>
             </div>
 
-            {/* Feedbacks section */}
             <div style={{ marginTop: 40, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <h3 style={{ marginBottom: 16, textAlign: 'center' }}>Comentarios de otros usuarios</h3>
                 {feedbacksLoading ? (

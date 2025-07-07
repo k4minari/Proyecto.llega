@@ -228,13 +228,19 @@ const EspaciosPorCategoria = () => {
                                     <div className="space-card-body">
                                         <h4>{space.name}</h4>
                                         <p>{space.description}</p>
-                                        <button
-                                            onClick={() => handleViewSpace(space.id)}
-                                            className="btn-primary"
-                                            style={{ marginTop: '12px' }}
-                                        >
-                                            Ver espacio
-                                        </button>
+                                        <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+                                            <button
+                                                onClick={() => handleViewSpace(space.id)}
+                                                className="btn-primary"
+                                            >
+                                                Ver espacio
+                                            </button>
+                                            <Link to={`/espacio/${space.id}/calendario`}>
+                                                <button className="btn-primary">
+                                                    Revisar Calendario
+                                                </button>
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             ))

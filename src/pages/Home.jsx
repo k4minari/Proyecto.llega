@@ -21,8 +21,7 @@ const CategoryCard = ({ category, onClick }) => (
             <h4>{category.label}</h4>
             <button
                 onClick={() => onClick(category.value)}
-                className="btn-secondary"
-                style={{ backgroundColor: '#007bff', color: 'white', marginTop: 'auto' }}
+                className="btn-primary"
             >
                 Ir a espacios de {category.label}
             </button>
@@ -88,9 +87,23 @@ const Home = () => {
             </header>
 
             <main>
-                <section className="hero-section" style={{ backgroundImage: `url(${heroBackground})` }}>
-                    <div className="logo-circulo" style={{ background: 'white', borderRadius: '50%', padding: '20px', marginBottom: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <h1 className="logo" style={{ fontSize: '3rem', color: 'black' }}>llega</h1>
+                <section className="hero-section" style={{backgroundImage: `url(${heroBackground})`}}>
+                    <div
+                        className="logo-circulo"
+                        style={{
+                            background: 'white',
+                            borderRadius: '50%',
+                            width: '160px',
+                            height: '160px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginBottom: '20px',
+                            marginLeft: 'auto',
+                            marginRight: 'auto'
+                        }}
+                    >
+                        <h1 className="logo" style={{fontSize: '3rem', color: 'black', margin: 0}}>llega</h1>
                     </div>
                     <h2>Llega al espacio que quieras</h2>
                 </section>
@@ -99,7 +112,7 @@ const Home = () => {
                     <h3>Categorías</h3>
                     <div className="spaces-grid">
                         {categories.map(cat => (
-                            <CategoryCard key={cat.value} category={cat} onClick={handleCategoryClick} />
+                            <CategoryCard key={cat.value} category={cat} onClick={handleCategoryClick}/>
                         ))}
                     </div>
                 </section>

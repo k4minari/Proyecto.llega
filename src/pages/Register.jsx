@@ -5,7 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase/config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-
+const isUnimetEmail = (email) => {
+  return email.endsWith('@correo.unimet.edu.ve');
+};
 const Register = () => {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
@@ -30,6 +32,11 @@ const Register = () => {
       setLoading(false);
       return;
     }
+    if (!isUnimetEmail(formData.correo)) {
+      setError('Solo se permiten correos unimet');
+      setLoading(false);
+      return;
+    }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, formData.correo, formData.password);
@@ -44,6 +51,7 @@ const Register = () => {
         carnet: formData.carnet,
         nombreDeUsuario: formData.usuario,
         correo: formData.correo,
+        role: "normal"
       });
 
       navigate('/');

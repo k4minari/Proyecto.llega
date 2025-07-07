@@ -28,7 +28,7 @@ const ReservationQR = () => {
     if (loading) return <h2>Cargando QR...</h2>;
     if (!reservation) return <h2>Reserva no encontrada.</h2>;
 
-    const verifyUrl = `https://llega-unimet-1bd09.web.app/admin-qr-verify?reservationId=${reservation.id}&verificationCode=${reservation.verificationCode}`;
+    const verifyUrl = `https://llega-unimet.firebaseapp.com/admin-qr-verify?reservationId=${reservation.id}&verificationCode=${reservation.verificationCode}`;
 
     return (
         <div style={{ textAlign: 'center', marginTop: 40 }}>

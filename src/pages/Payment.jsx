@@ -1,91 +1,72 @@
-// src/pages/Payment.jsx
-
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
-
-const PAYPAL_CLIENT_ID = "AW949SN6ow8koxf23Cwb7XDWD2aLiR_VPm9KZSuRSD83JJ2h-IMetZhHHHnzpVDyzI4Z3evu01TUvUqS"; 
+const PAYPAL_CLIENT_ID = "AW949SN6ow8koxf23Cwb7XDWD2aLiR_VPm9KZSuRSD83JJ2h-IMetZhHHHnzpVDyzI4Z3evu01TUvUqS";
 
 const Payment = () => {
-    const { reservationId } = useParams();
-    const [reservation, setReservation] = useState(null);
-    const [error, setError] = useState(null);
+    const location = useLocation();
     const navigate = useNavigate();
+    const reservationData = location.state?.reservationData;
 
-    useEffect(() => {
-        const fetchReservation = async () => {
-            if (!reservationId) return;
-            try {
-                const docRef = doc(db, 'reservations', reservationId);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    setReservation(docSnap.data());
-                } else {
-                    setError("La reserva que intentas pagar no existe.");
-                }
-            } catch (err) {
-                setError("Error al cargar los datos de la reserva.");
-            }
-        };
-        fetchReservation();
-    }, [reservationId]);
+    if (!reservationData) {
+        return (
+            <div className="page-container">
+                <h2>Error</h2>
+                <p>Datos de la reservación no encontrados.</p>
+            </div>
+        );
+    }
 
-    if (error) return <div className="page-container"><h2>Error</h2><p>{error}</p></div>;
-    if (!reservation) return <div className="page-container"><h2>Cargando...</h2></div>;
-
-    // --- Renderizado de la Página de Pago ---
     return (
         <div className="page-container" style={{maxWidth: '500px', margin: '40px auto', textAlign: 'center'}}>
             <h2>Confirmar Pago</h2>
             <div className="reservation-summary" style={{background: '#f9f9f9', padding: '20px', borderRadius: '8px', marginBottom: '20px'}}>
-                <p>Estás a punto de pagar por tu reserva de:</p>
-                <h3 style={{margin: '10px 0'}}>{reservation.spaceName}</h3>
-                <p style={{fontSize: '1.5rem', fontWeight: 'bold'}}>Total a Pagar: <strong>${reservation.price} USD</strong></p>
+                <p>Vas a pagar por la reservación de:</p>
+                <h3 style={{margin: '10px 0'}}>{reservationData.spaceName}</h3>
+                <p style={{fontSize: '1.5rem', fontWeight: 'bold'}}>Total: <strong>${reservationData.price} USD</strong></p>
             </div>
-            
-            <PayPalScriptProvider options={{ "client-id": PAYPAL_CLIENT_ID, currency: "USD" }}>
+
+            <PayPalScriptProvider options={{ "client-id": PAYPAL_CLIENT_ID, currency: "USD", "disable-funding": "paylater" }}>
                 <PayPalButtons
                     style={{ layout: "vertical" }}
                     createOrder={(data, actions) => {
                         return actions.order.create({
                             purchase_units: [{
-                                description: `Reserva para ${reservation.spaceName} en Llega Unimet`,
+                                description: `Reservation for ${reservationData.spaceName}`,
                                 amount: {
-                                    value: reservation.price.toString(),
+                                    value: reservationData.price.toString(),
                                 },
                             }],
                         });
                     }}
                     onApprove={async (data, actions) => {
                         const order = await actions.order.capture();
-                        console.log("Pago exitoso:", order);
-                        
                         try {
-                            const reservationRef = doc(db, 'reservations', reservationId);
-                            await updateDoc(reservationRef, {
+                            await addDoc(collection(db, 'reservations'), {
+                                ...reservationData,
                                 status: 'paid',
                                 paypalOrderId: order.id,
                                 payerEmail: order.payer.email_address,
+                                createdAt: new Date(),
                             });
-                            
-                            alert('¡Pago completado con éxito!');
+                            alert('Pago realizado!');
                             navigate('/mis-reservas');
                         } catch (err) {
-                            console.error("Error al actualizar la reserva:", err);
-                            alert("Tu pago fue procesado, pero hubo un error al confirmar tu reserva. Contacta a soporte.");
+                            console.error("Error creating reservation:", err);
+                            alert("Hubo un error. Te recomendamos crear un ticket con el administrador.");
                         }
                     }}
                     onError={(err) => {
-                        console.error("Error de PayPal:", err);
-                        alert("Ocurrió un error con el pago. Por favor, inténtalo de nuevo.");
+                        console.error("PayPal error:", err);
+                        alert("Hubo un error con el pago. Intenta de nuevo.");
                     }}
                 />
             </PayPalScriptProvider>
         </div>
     );
-}
+};
 
 export default Payment;

@@ -143,9 +143,9 @@ const MyReservations = () => {
                 </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', marginTop: 16 }}>
-                <span style={{ fontSize: 15, color: '#333' }}>
-                    Precio: ${res.price}
-                </span>
+        <span style={{ fontSize: 15, color: '#333' }}>
+          Precio: ${res.price}
+        </span>
                 {showQR && (
                     <button
                         style={{
@@ -202,9 +202,16 @@ const MyReservations = () => {
     );
 
     return (
-        <div className="home-container">
-            <header className="home-header">
-                <h1 className="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>llega</h1>
+        <div
+            className="home-container"
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+            }}
+        >
+            <header className="home-header" style={{ flexShrink: 0 }}>
+                <h1 className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>llega</h1>
                 <nav>
                     <Link to="/">Inicio</Link>
                     {currentUser && <Link to="/mis-reservas">Mis Reservas</Link>}
@@ -215,7 +222,7 @@ const MyReservations = () => {
                         <button
                             onClick={handleLogout}
                             className="btn-logout"
-                            style={{backgroundColor: 'red', color: 'white'}}
+                            style={{ backgroundColor: 'red', color: 'white' }}
                         >
                             Cerrar Sesión
                         </button>
@@ -223,16 +230,21 @@ const MyReservations = () => {
                 ) : (
                     <div>
                         <button onClick={() => navigate('/register')} className="btn-primary"
-                                style={{width: 'auto', padding: '8px 15px'}}>Crear Cuenta
+                                style={{ width: 'auto', padding: '8px 15px' }}>Crear Cuenta
                         </button>
-                        <button onClick={() => navigate('/login')} style={{marginLeft: '10px'}}>Iniciar Sesión</button>
+                        <button onClick={() => navigate('/login')} style={{ marginLeft: '10px' }}>Iniciar Sesión</button>
                     </div>
                 )}
             </header>
 
-            <main>
-                <div className="page-container" style={{padding: '32px'}}>
-                    <h2 style={{textAlign: 'center', marginBottom: '32px'}}>Mis Reservas</h2>
+            <main
+                style={{
+                    flexGrow: 1,
+                    padding: '32px',
+                }}
+            >
+                <div className="page-container">
+                    <h2 style={{ textAlign: 'center', marginBottom: '32px' }}>Mis Reservas</h2>
                     {loading ? (
                         <h2 style={{ textAlign: 'center' }}>Cargando tus reservas...</h2>
                     ) : error ? (
@@ -254,7 +266,7 @@ const MyReservations = () => {
                         </div>
                     )}
 
-                    <h2 style={{textAlign: 'center', margin: '48px 0 32px 0'}}>Reservas Anteriores</h2>
+                    <h2 style={{ textAlign: 'center', margin: '48px 0 32px 0' }}>Reservas Anteriores</h2>
                     {past.length === 0 ? (
                         <p style={{ textAlign: 'center' }}>No tienes reservas anteriores.</p>
                     ) : (
@@ -272,7 +284,7 @@ const MyReservations = () => {
                 </div>
             </main>
 
-            <footer className="home-footer">
+            <footer className="home-footer" style={{ flexShrink: 0, padding: '20px', textAlign: 'center' }}>
                 <div style={{ marginBottom: '20px' }}>
                     <img src={logoUnimet} alt="Logo Unimet" style={{ width: '200px' }} />
                 </div>

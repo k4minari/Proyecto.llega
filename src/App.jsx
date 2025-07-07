@@ -30,6 +30,7 @@ import FeedbackDetail from './pages/FeedbackDetail';
 import FeedbackForm from './pages/FeedbackForm';
 import ReservationQR from './pages/ReservationQR';
 import AdminQRVerify from './pages/AdminQRVerify';
+import SpaceCalendar from './pages/SpaceCalendar';
 
 
 
@@ -69,12 +70,13 @@ function App() {
           path="/reserva/:spaceId" 
           element={<ProtectedRoute><Reservation /></ProtectedRoute>} 
         />
+        <Route path="/espacio/:spaceId/calendario" element={<ProtectedRoute><SpaceCalendar /></ProtectedRoute>} />
         <Route path="/espacios" element={<EspaciosPorCategoria />} />
         <Route path="/feedback/:id"   element={<ProtectedRoute><FeedbackForm /></ProtectedRoute>}/>
         <Route path="/feedback-detail/:id" element={<ProtectedRoute><FeedbackDetail /></ProtectedRoute>} />
         {/* ▼▼▼ RUTAS NUEVAS AÑADIDAS ▼▼▼ */}
         <Route 
-          path="/pago/:reservationId" 
+          path="/pago"
           element={<ProtectedRoute><Payment /></ProtectedRoute>} 
         />
         <Route 

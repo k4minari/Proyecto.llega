@@ -1,44 +1,50 @@
-/* src/pages/AdminPanel.css */
-
+/* Estilos base (para pantallas grandes o por defecto) */
 .admin-nav {
-  display: flex;
-  gap: 10px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 15px;
-  margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Permite que los botones pasen a la siguiente línea si no caben */
+    justify-content: center; /* Centra los botones en pantallas grandes */
 }
 
 .admin-nav button {
-  padding: 10px 15px;
-  border: 1px solid transparent;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  border-radius: 5px;
+    padding: 10px 15px;
+    border: 1px solid transparent;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 5px;
+    flex-grow: 1; /* Permite que los botones crezcan para llenar el espacio */
+    min-width: 120px; /* Ancho mínimo para los botones */
+    margin: 5px; /* Pequeño margen para separación cuando se envuelven */
 }
 
 .admin-nav button.active {
-  background-color: var(--primary-orange);
-  color: white;
-  font-weight: bold;
+    background-color: var(--primary-orange);
+    color: white;
+    font-weight: bold;
 }
 
 .admin-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .space-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 .space-form input, .space-form textarea {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 100%; /* Asegura que ocupen todo el ancho disponible */
+    box-sizing: border-box; /* Incluye padding y borde en el ancho total */
 }
 .space-form .btn-primary {
     width: fit-content;
@@ -55,6 +61,8 @@
     align-items: center;
     padding: 15px;
     border-bottom: 1px solid #eee;
+    flex-wrap: wrap; /* Permite que los elementos de la lista se envuelvan */
+    text-align: center; /* Centra el texto en caso de envoltura */
 }
 .spaces-list li:last-child {
     border-bottom: none;
@@ -66,4 +74,51 @@
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 10px; /* Agrega espacio si el botón se mueve a una nueva línea */
+}
+
+/* Media Query para pantallas pequeñas (ej. celulares) */
+@media (max-width: 768px) {
+    .admin-nav {
+        flex-direction: column; /* Apila los botones verticalmente */
+        align-items: stretch; /* Estira los botones para que ocupen todo el ancho */
+    }
+
+    .admin-nav button {
+        margin: 5px 0; /* Ajusta los márgenes para la pila vertical */
+        min-width: unset; /* Reinicia el ancho mínimo */
+    }
+
+    .admin-content {
+        padding: 15px; /* Reduce el padding para pantallas pequeñas */
+    }
+
+    .spaces-list li {
+        flex-direction: column; /* Apila los elementos de la lista verticalmente */
+        align-items: flex-start; /* Alinea el contenido a la izquierda */
+        padding: 10px; /* Reduce el padding */
+    }
+
+    .spaces-list li span { /* Si tienes texto dentro del li además del botón */
+        width: 100%; /* Asegura que el texto ocupe todo el ancho */
+        text-align: left; /* Alinea el texto a la izquierda */
+        margin-bottom: 5px; /* Espacio debajo del texto */
+    }
+
+    .spaces-list .btn-delete {
+        width: 100%; /* Hace que el botón de eliminar ocupe todo el ancho */
+        margin-top: 10px; /* Asegura espacio entre el contenido y el botón */
+    }
+
+    .space-form .btn-primary {
+        width: 100%; /* El botón de formulario ocupa todo el ancho */
+        align-self: center; /* Centra el botón */
+    }
+}
+
+/* Opcional: Media Query para pantallas aún más pequeñas (ej. smartphones muy pequeños) */
+@media (max-width: 480px) {
+    .admin-content {
+        padding: 10px; /* Más reducción de padding */
+    }
 }

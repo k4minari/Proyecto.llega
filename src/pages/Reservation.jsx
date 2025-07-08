@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
-import { doc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import useAuth from '../hooks/useAuth';
 import { v4 as uuidv4 } from 'uuid';
+import { SpaceProvider, useSpace } from './SpaceProvider';
 
-
-const Reservation = () => {
-    const { spaceId } = useParams();
-    const [searchParams] = useSearchParams();
-    const fecha = searchParams.get('fecha');
-    const hora = searchParams.get('hora');
-    const [space, setSpace] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+const ReservationContent = ({ fecha, hora }) => {
+    const { space, loading, error } = useSpace();
     const { currentUser } = useAuth();
     const navigate = useNavigate();
 
@@ -21,40 +15,13 @@ const Reservation = () => {
     const [feedbacksLoading, setFeedbacksLoading] = useState(true);
 
     useEffect(() => {
-        const fetchSpace = async () => {
-            if (!spaceId) {
-                setError("No se proporcionó un ID de espacio.");
-                setLoading(false);
-                return;
-            }
-            try {
-                const docRef = doc(db, 'spaces', spaceId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    setSpace({ id: docSnap.id, ...docSnap.data() });
-                } else {
-                    setError("El documento del espacio no fue encontrado.");
-                }
-            } catch (err) {
-                console.error("Error al obtener el documento:", err);
-                setError("Ocurrió un error técnico al buscar el espacio.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchSpace();
-    }, [spaceId]);
-
-    useEffect(() => {
         const fetchFeedbacks = async () => {
-            if (!spaceId) return;
+            if (!space?.id) return;
             setFeedbacksLoading(true);
             try {
                 const q = query(
                     collection(db, 'feedback'),
-                    where('spaceId', '==', spaceId)
+                    where('spaceId', '==', space.id)
                 );
                 const snap = await getDocs(q);
                 const feedbacksRaw = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -81,7 +48,7 @@ const Reservation = () => {
             }
         };
         fetchFeedbacks();
-    }, [spaceId]);
+    }, [space]);
 
     const handleReservation = async () => {
         if (!currentUser) {
@@ -95,13 +62,12 @@ const Reservation = () => {
                 spaceId: space.id,
                 spaceName: space.name,
                 status: 'pending',
-                createdAt: serverTimestamp(),
+                createdAt: new Date(),
                 price: space.price,
                 fecha: fecha || null,
                 hora: hora || null,
                 verificationCode,
             };
-            //const docRef = await addDoc(collection(db, "reservations"), reservationData);
             navigate('/pago', { state: { reservationData } });
         } catch (error) {
             console.error("Error al crear la reserva: ", error);
@@ -199,6 +165,19 @@ const Reservation = () => {
                 )}
             </div>
         </div>
+    );
+};
+
+const Reservation = () => {
+    const { spaceId } = useParams();
+    const [searchParams] = useSearchParams();
+    const fecha = searchParams.get('fecha');
+    const hora = searchParams.get('hora');
+
+    return (
+        <SpaceProvider spaceId={spaceId}>
+            <ReservationContent fecha={fecha} hora={hora} />
+        </SpaceProvider>
     );
 };
 

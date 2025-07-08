@@ -31,6 +31,9 @@ import FeedbackForm from './pages/FeedbackForm';
 import ReservationQR from './pages/ReservationQR';
 import AdminQRVerify from './pages/AdminQRVerify';
 import SpaceCalendar from './pages/SpaceCalendar';
+import { AuthMediatorProvider } from './pages/AuthMediator';
+
+import { SpaceProvider } from './pages/SpaceProvider'; // Adjust the path if needed
 
 
 
@@ -52,7 +55,10 @@ function App() {
 
   // Una vez verificado, renderizamos el sistema de rutas
   return (
-    <Router>
+      <AuthMediatorProvider>
+        <SpaceProvider>
+
+      <Router>
       {/* El componente <Routes> decide qué página mostrar basado en la URL */}
       <Routes>
 
@@ -114,6 +120,10 @@ function App() {
       {currentUser && <ChatbotWidget />}
 
     </Router>
+        </SpaceProvider>
+
+      </AuthMediatorProvider>
+
   );
 }
 

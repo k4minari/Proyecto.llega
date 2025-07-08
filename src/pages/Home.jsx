@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { auth } from '../firebase/config';
+import { collection, getDocs } from 'firebase/firestore';
+import { auth, db } from '../firebase/config';
 import useAuth from '../hooks/useAuth';
 
 import heroBackground from '../assets/UNIMET.jpg';
@@ -29,9 +30,63 @@ const CategoryCard = ({ category, onClick }) => (
     </div>
 );
 
+const SpaceCard = ({ space, onClick }) => (
+    <div className="space-card" style={{ minHeight: '300px', display: 'flex', flexDirection: 'column' }}>
+        <img src={space.imageUrl} alt={space.name} className="space-card-img" />
+        <div className="space-card-body">
+            <h4>{space.name}</h4>
+            <p style={{ margin: '8px 0 0 0', color: '#888', fontSize: 15 }}>
+                Reservas: {space.reservationCount}
+            </p>
+            <button
+                onClick={() => onClick(space.id)}
+                className="btn-primary"
+                style={{ marginTop: 12 }}
+            >
+                Editar Espacio
+            </button>
+        </div>
+    </div>
+);
+
 const Home = () => {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
+
+    const [topSpaces, setTopSpaces] = useState([]);
+    const [loadingTop, setLoadingTop] = useState(false);
+
+    useEffect(() => {
+        const fetchTopSpaces = async () => {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            setLoadingTop(true);
+
+            const spacesSnap = await getDocs(collection(db, 'spaces'));
+            const spaces = spacesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            const reservationsSnap = await getDocs(collection(db, 'reservations'));
+            const reservationCounts = {};
+            reservationsSnap.docs.forEach(doc => {
+                const data = doc.data();
+                if (data.spaceId) {
+                    reservationCounts[data.spaceId] = (reservationCounts[data.spaceId] || 0) + 1;
+                }
+            });
+
+            const spacesWithCount = spaces.map(space => ({
+                ...space,
+                reservationCount: reservationCounts[space.id] || 0
+            }));
+
+            const top = spacesWithCount
+                .sort((a, b) => b.reservationCount - a.reservationCount)
+                .slice(0, 4);
+
+            setTopSpaces(top);
+            setLoadingTop(false);
+        };
+        fetchTopSpaces();
+    }, [currentUser]);
 
     const handleLogout = async () => {
         try {
@@ -51,6 +106,10 @@ const Home = () => {
         }
     };
 
+    const handleEditSpace = (spaceId) => {
+        navigate(`/admin/editar-espacio/${spaceId}`);
+    };
+
     return (
         <div className="home-container">
             <header className="home-header">
@@ -62,10 +121,7 @@ const Home = () => {
                     )}
                     {currentUser && currentUser.role === 'admin' && (
                         <Link to="/admin/espacios/crear">Crear Espacio</Link>
-
-                        )}
-
-
+                    )}
                 </nav>
                 {currentUser ? (
                     <div className="user-actions">
@@ -116,6 +172,21 @@ const Home = () => {
                         ))}
                     </div>
                 </section>
+
+                {currentUser && currentUser.role === 'admin' && (
+                    <section className="spaces-section" style={{ marginTop: 10 }}>
+                        <h3>Espacios más solicitados</h3>
+                        {loadingTop ? (
+                            <p>Cargando...</p>
+                        ) : (
+                            <div className="spaces-grid">
+                                {topSpaces.map(space => (
+                                    <SpaceCard key={space.id} space={space} onClick={handleEditSpace} />
+                                ))}
+                            </div>
+                        )}
+                    </section>
+                )}
             </main>
 
             <footer className="home-footer">

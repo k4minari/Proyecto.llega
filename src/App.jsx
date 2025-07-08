@@ -101,6 +101,7 @@ function App() {
             </AdminProtectedRoute>
           }
         />
+
         <Route path="/admin/espacios" element={<ProtectedRoute><AdminEspaciosPorCategoria /></ProtectedRoute>} />
         <Route path="/admin/editar-espacio/:id" element={<ProtectedRoute><EditarEspacio /></ProtectedRoute>} />
         <Route path="/admin/espacios/crear" element={<ProtectedRoute><AdminCrearEspacio /></ProtectedRoute>} />

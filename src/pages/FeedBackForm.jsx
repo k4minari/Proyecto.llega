@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { collection, addDoc, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import useAuth from '../hooks/useAuth';
 
@@ -61,14 +61,15 @@ const FeedbackForm = () => {
             await addDoc(collection(db, 'feedback'), {
                 comment,
                 spaceId,
+                reservationId: id,
                 userId: currentUser.uid,
                 stars: Number(stars),
                 createdAt: new Date()
             });
-            await deleteDoc(doc(db, 'reservations', id));
+            await updateDoc(doc(db, 'reservations', id), { visible: false });
             alert('¡Gracias por tu feedback!');
             navigate('/mis-reservas');
-        } catch (err) {
+        } catch {
             alert('Error al enviar feedback.');
         }
         setLoading(false);

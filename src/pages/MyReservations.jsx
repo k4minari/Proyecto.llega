@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { collection, query, where, getDocs, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase/config';
 import useAuth from '../hooks/useAuth';
 import logoUnimet from '../assets/Logo-UNIMET-color-300-dpi.jpg';
@@ -65,7 +65,7 @@ const MyReservations = () => {
                         };
                     })
                 );
-                setReservations(reservationsWithSpace);
+                setReservations(reservationsWithSpace.filter(r => r.visible !== false));
             } catch {
                 setError("Error loading reservations.");
             } finally {
@@ -85,18 +85,22 @@ const MyReservations = () => {
         }
     };
 
-    const handleDelete = async (id) => {
+    const handleHide = async (id) => {
         try {
-            await deleteDoc(doc(db, "reservations", id));
+            await updateDoc(doc(db, "reservations", id), { visible: false });
             setReservations(prev => prev.filter(res => res.id !== id));
         } catch (err) {
-            console.error("Error deleting reservation:", err);
+            console.error("Error hiding reservation:", err);
             alert("No se pudo eliminar la reserva.");
         }
     };
 
     const handleShowQR = (id) => {
         navigate(`/qr/${id}`);
+    };
+
+    const handleFeedback = (id) => {
+        navigate(`/feedback/${id}`);
     };
 
     const now = new Date();
@@ -111,7 +115,7 @@ const MyReservations = () => {
         }
     });
 
-    const renderReservationCard = (res, showQR = true, showDelete = false, showFeedback = false) => (
+    const renderReservationCard = (res, showQR = true, showHide = false, showFeedback = false) => (
         <div key={res.id} style={cardStyle}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <img
@@ -143,9 +147,9 @@ const MyReservations = () => {
                 </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', marginTop: 16 }}>
-        <span style={{ fontSize: 15, color: '#333' }}>
-          Precio: ${res.price}
-        </span>
+                <span style={{ fontSize: 15, color: '#333' }}>
+                    Precio: ${res.price}
+                </span>
                 {showQR && (
                     <button
                         style={{
@@ -163,9 +167,9 @@ const MyReservations = () => {
                         Ver QR
                     </button>
                 )}
-                {showDelete && (
+                {showHide && (
                     <button
-                        onClick={() => handleDelete(res.id)}
+                        onClick={() => handleHide(res.id)}
                         style={{
                             marginLeft: 16,
                             background: '#e53935',
@@ -182,7 +186,7 @@ const MyReservations = () => {
                 )}
                 {showFeedback && (
                     <button
-                        onClick={() => navigate(`/feedback/${res.id}`)}
+                        onClick={() => handleFeedback(res.id)}
                         style={{
                             marginLeft: 16,
                             background: '#ff7300',

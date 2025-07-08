@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 const categories = [
@@ -28,6 +28,40 @@ const labelStyle = {
     fontWeight: 500,
 };
 
+const cardStyle = {
+    background: '#fff',
+    border: '1.5px solid #e0e0e0',
+    borderRadius: 12,
+    boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
+    padding: 20,
+    margin: '12px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    minWidth: 260,
+    maxWidth: 350,
+};
+
+const cardButtonStyle = {
+    background: '#ff7300',
+    color: '#fff',
+    border: 'none',
+    borderRadius: 8,
+    padding: '8px 0',
+    fontWeight: 600,
+    fontSize: 15,
+    cursor: 'pointer',
+    marginTop: 8,
+    transition: 'background 0.2s',
+};
+
+function isPastReservation(fecha, hora) {
+    const [year, month, day] = fecha.split('-').map(Number);
+    const [hour, minute] = hora.split(':').map(Number);
+    const resDate = new Date(year, month - 1, day, hour, minute);
+    return resDate < new Date();
+}
+
 const AdminEditarEspacio = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -40,6 +74,9 @@ const AdminEditarEspacio = () => {
         supervisorId: '',
     });
     const [loading, setLoading] = useState(false);
+
+    const [reservations, setReservations] = useState([]);
+    const [resLoading, setResLoading] = useState(true);
 
     useEffect(() => {
         const fetchSpace = async () => {
@@ -60,6 +97,25 @@ const AdminEditarEspacio = () => {
         fetchSpace();
     }, [id]);
 
+    useEffect(() => {
+        const fetchReservations = async () => {
+            setResLoading(true);
+            try {
+                const q = query(
+                    collection(db, 'reservations'),
+                    where('spaceId', '==', id)
+                );
+                const snap = await getDocs(q);
+                const resList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setReservations(resList);
+            } catch {
+                setReservations([]);
+            }
+            setResLoading(false);
+        };
+        fetchReservations();
+    }, [id]);
+
     const handleChange = e => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -72,11 +128,28 @@ const AdminEditarEspacio = () => {
             await updateDoc(doc(db, 'spaces', id), data);
             alert('Espacio actualizado correctamente.');
             navigate('/');
-        } catch (error) {
+        } catch {
             alert('Error al actualizar el espacio.');
         }
         setLoading(false);
     };
+
+    const handleViewFeedback = async (reservationId) => {
+        const q = query(
+            collection(db, 'feedback'),
+            where('reservationId', '==', reservationId)
+        );
+        const snap = await getDocs(q);
+        if (snap.empty) {
+            alert('No hay feedback para esta reserva.');
+        } else {
+            const feedbackId = snap.docs[0].id;
+            navigate(`/feedback-detail/${feedbackId}`);
+        }
+    };
+
+    const pastReservations = reservations.filter(r => isPastReservation(r.fecha, r.hora));
+    const futureReservations = reservations.filter(r => !isPastReservation(r.fecha, r.hora));
 
     return (
         <div
@@ -183,6 +256,54 @@ const AdminEditarEspacio = () => {
                     {loading ? 'Actualizando...' : 'Actualizar Espacio'}
                 </button>
             </form>
+
+            <div style={{ marginTop: 48 }}>
+                <h3 style={{ marginBottom: 16 }}>Reservas Futuras</h3>
+                {resLoading ? (
+                    <p>Cargando reservas...</p>
+                ) : futureReservations.length === 0 ? (
+                    <p>No hay reservas futuras.</p>
+                ) : (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+                        {futureReservations.map(r => (
+                            <div key={r.id} style={cardStyle}>
+                                <div><strong>Usuario:</strong> {r.userId}</div>
+                                <div><strong>Fecha:</strong> {r.fecha}</div>
+                                <div><strong>Hora:</strong> {r.hora}</div>
+                                <button
+                                    style={cardButtonStyle}
+                                    onClick={() => navigate(`/qr/${r.id}`)}
+                                >
+                                    Ver QR
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                <h3 style={{ margin: '40px 0 16px 0' }}>Reservas Pasadas</h3>
+                {resLoading ? (
+                    <p>Cargando reservas...</p>
+                ) : pastReservations.length === 0 ? (
+                    <p>No hay reservas pasadas.</p>
+                ) : (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
+                        {pastReservations.map(r => (
+                            <div key={r.id} style={cardStyle}>
+                                <div><strong>Usuario:</strong> {r.userId}</div>
+                                <div><strong>Fecha:</strong> {r.fecha}</div>
+                                <div><strong>Hora:</strong> {r.hora}</div>
+                                <button
+                                    style={cardButtonStyle}
+                                    onClick={() => handleViewFeedback(r.id)}
+                                >
+                                    Ver Feedback
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
